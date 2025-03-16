@@ -1,0 +1,10 @@
+[{
+  "modid": "plenilune-lib",
+  "name": "Plenilune Lib",
+  "description": "Modding library based on native minecraft and mixin.",
+  "version": "1.0.0.0",
+  "mcversion": "1.21s",
+  "logoFile": "assets/plenilune-lib/icon.png",
+  "url": "https://github.com/awa-crescent/PleniluneLib",
+  "authorList": ["awa_crescent"],
+}]

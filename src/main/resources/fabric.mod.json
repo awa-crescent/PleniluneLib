@@ -1,0 +1,35 @@
+{
+	"schemaVersion": 1,
+	"id": "plenilune-lib",
+	"version": "${version}",
+	"name": "Plenilune Lib",
+	"description": "Modding library based on native minecraft and mixin.",
+	"authors": [
+		"awa_crescent"
+	],
+	"contact": {
+		"homepage": "https://github.com/awa-crescent/",
+		"sources": "https://github.com/awa-crescent/CrescentLib"
+	},
+	"license": "CC0-1.0",
+	"icon": "assets/plenilune-lib/icon.png",
+	"environment": "*",
+	"entrypoints": {
+		"main": [
+			"lib.plenilune.PleniluneLib"
+		]
+	},
+	"mixins": [
+		"plenilune-lib.mixins.json"
+	],
+	"depends": {
+		"fabricloader": ">=0.16.10",
+		"minecraft": "~1.21",
+		"java": ">=21",
+		"fabric-api": "*",
+		"lunar-lib": "*"
+	},
+	"suggests": {
+		"another-mod": "*"
+	}
+} 
