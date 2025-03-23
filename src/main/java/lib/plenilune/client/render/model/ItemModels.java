@@ -11,6 +11,7 @@ import lib.lunar.jvm.Manipulator;
 import lib.plenilune.PleniluneLib;
 import lib.plenilune.client.render.item.ItemRender;
 import lib.plenilune.client.render.item.ItemRendererRenderFunc;
+import lib.plenilune.core.ResourceLocationBuilder;
 import lib.plenilune.item.ItemUtils;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.ItemRenderer;
@@ -34,7 +35,7 @@ public class ItemModels {
 			HashMap<String, ItemModelRenderingInfo> map = itemModels.get(displayContext.getId());
 			if (map.containsKey(item_id)) {
 				ItemModelRenderingInfo info = map.get(item_id);
-				ItemRender.currentFinalModel = itemRender.getItemModelShaper().getModelManager().getModel(ModelResourceLocation.inventory(info.resourceLoc));
+				ItemRender.currentFinalModel = itemRender.getItemModelShaper().getModelManager().getModel(new ModelResourceLocation(info.resourceLoc, "inventory"));
 				// 如果指定渲染物品类型，则需要更改ItemStack的item成员变量，因为该参数和model同样关乎渲染
 				if (info.itemType != null) {
 					ItemRender.currentOriginalRenderItem = (Item) Manipulator.access(itemStack, "field_8038");// 储存当前的ItemStack.item
@@ -87,11 +88,11 @@ public class ItemModels {
 	}
 
 	public static void setInventoryModel(String item_id, String model_resloc) {
-		setInventoryModel(item_id, ResourceLocation.parse(model_resloc));
+		setInventoryModel(item_id, ResourceLocationBuilder.getResourceLocationFromNamespacedID(model_resloc));
 	}
 
 	public static void setInventoryModel(String item_id, String model_resloc, Item item) {
-		setInventoryModel(item_id, ResourceLocation.parse(model_resloc), item);
+		setInventoryModel(item_id, ResourceLocationBuilder.getResourceLocationFromNamespacedID(model_resloc), item);
 	}
 
 	// 物品渲染模型设置
@@ -111,11 +112,11 @@ public class ItemModels {
 	}
 
 	public static void setInHandModel(String item_id, String model_resloc) {
-		setInHandModel(item_id, ResourceLocation.parse(model_resloc));
+		setInHandModel(item_id, ResourceLocationBuilder.getResourceLocationFromNamespacedID(model_resloc));
 	}
 
 	public static void setInHandModel(String item_id, String model_resloc, Item item) {
-		setInHandModel(item_id, ResourceLocation.parse(model_resloc), item);
+		setInHandModel(item_id, ResourceLocationBuilder.getResourceLocationFromNamespacedID(model_resloc), item);
 	}
 
 	public static ItemModelRenderingInfo getItemModel(String item_id, ItemDisplayContext context) {

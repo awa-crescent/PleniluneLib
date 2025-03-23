@@ -6,14 +6,13 @@ import org.joml.Matrix4f;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.BufferBuilder;
-import com.mojang.blaze3d.vertex.BufferUploader;
 import com.mojang.blaze3d.vertex.DefaultVertexFormat;
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.blaze3d.vertex.Tesselator;
 import com.mojang.blaze3d.vertex.VertexFormat;
 
+import lib.plenilune.client.render.TesselatorInstance;
+import lib.plenilune.core.ResourceLocationBuilder;
 import net.minecraft.client.renderer.GameRenderer;
-import net.minecraft.resources.ResourceLocation;
 
 public class GuiRender {
 
@@ -42,12 +41,12 @@ public class GuiRender {
 		RenderSystem.setShaderTexture(0, (atlasLocation));
 		RenderSystem.setShader(GameRenderer::getPositionTexShader);
 		Matrix4f matrix4f = poseStack.last().pose();
-		BufferBuilder bufferBuilder = Tesselator.getInstance().begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_TEX);
-		bufferBuilder.addVertex(matrix4f, (float) x1, (float) y1, (float) blitOffset).setUv(minU, minV);
-		bufferBuilder.addVertex(matrix4f, (float) x1, (float) y2, (float) blitOffset).setUv(minU, maxV);
-		bufferBuilder.addVertex(matrix4f, (float) x2, (float) y2, (float) blitOffset).setUv(maxU, maxV);
-		bufferBuilder.addVertex(matrix4f, (float) x2, (float) y1, (float) blitOffset).setUv(maxU, minV);
-		BufferUploader.drawWithShader(bufferBuilder.buildOrThrow());
+		BufferBuilder bufferBuilder = TesselatorInstance.getBufferBuilder(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_TEX);
+		TesselatorInstance.posUvVertex(bufferBuilder, matrix4f, (float) x1, (float) y1, (float) blitOffset, minU, minV);
+		TesselatorInstance.posUvVertex(bufferBuilder, matrix4f, (float) x1, (float) y2, (float) blitOffset, minU, maxV);
+		TesselatorInstance.posUvVertex(bufferBuilder, matrix4f, (float) x2, (float) y2, (float) blitOffset, maxU, maxV);
+		TesselatorInstance.posUvVertex(bufferBuilder, matrix4f, (float) x2, (float) y1, (float) blitOffset, maxU, minV);
+		TesselatorInstance.drawBufferBuilder(bufferBuilder);
 	}
 
 	public static void blitImage(PoseStack poseStack, net.minecraft.resources.ResourceLocation atlasLocation, int x1, int x2, int y1, int y2, int blitOffset) {
@@ -59,7 +58,7 @@ public class GuiRender {
 	}
 
 	public static void blitImage(PoseStack poseStack, String atlasLocation, int x1, int x2, int y1, int y2, int blitOffset, float minU, float maxU, float minV, float maxV) {
-		blitImage(poseStack, ResourceLocation.parse(atlasLocation), x1, x2, y1, y2, blitOffset, minU, maxU, minV, maxV);
+		blitImage(poseStack, ResourceLocationBuilder.getResourceLocationFromNamespacedID(atlasLocation), x1, x2, y1, y2, blitOffset, minU, maxU, minV, maxV);
 	}
 
 	public static void blitImage(PoseStack poseStack, String atlasLocation, int x1, int x2, int y1, int y2, int blitOffset) {
@@ -100,7 +99,7 @@ public class GuiRender {
 	}
 
 	public static void drawImage(PoseStack poseStack, String atlasLocation, int x1, int x2, int y1, int y2, int blitOffset, float minU, float maxU, float minV, float maxV) {
-		drawImage(poseStack, ResourceLocation.parse(atlasLocation), x1, x2, y1, y2, blitOffset, minU, maxU, minV, maxV);
+		drawImage(poseStack, ResourceLocationBuilder.getResourceLocationFromNamespacedID(atlasLocation), x1, x2, y1, y2, blitOffset, minU, maxU, minV, maxV);
 	}
 
 	public static void drawImage(PoseStack poseStack, String atlasLocation, int x1, int x2, int y1, int y2, int blitOffset) {
@@ -145,7 +144,7 @@ public class GuiRender {
 	}
 
 	public static void drawImageInSlot(PoseStack poseStack, String atlasLocation, int x, int y, int blitOffset, float minU, float maxU, float minV, float maxV) {
-		drawImageInSlot(poseStack, ResourceLocation.parse(atlasLocation), x, y, blitOffset, minU, maxU, minV, maxV);
+		drawImageInSlot(poseStack, ResourceLocationBuilder.getResourceLocationFromNamespacedID(atlasLocation), x, y, blitOffset, minU, maxU, minV, maxV);
 	}
 
 	public static void drawImageInSlot(PoseStack poseStack, String atlasLocation, int x, int y, int blitOffset) {
