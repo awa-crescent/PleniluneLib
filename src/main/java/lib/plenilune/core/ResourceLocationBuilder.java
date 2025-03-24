@@ -53,7 +53,7 @@ public class ResourceLocationBuilder {
 	 * @return 返回name对应的T类型注册表的ResourceKey
 	 */
 	public static <T> ResourceKey<T> getResourceKey(ResourceKey<? extends Registry<T>> resource_key, String namespace, String id) {
-		return ResourceKey.create(resource_key, ResourceLocation.fromNamespaceAndPath(namespace, id));
+		return ResourceKey.create(resource_key, getResourceLocationFromNamespacedID(namespace, id));
 	}
 
 	/**

@@ -1,5 +1,7 @@
 package lib.plenilune.client.render.gui.image;
 
+import lib.plenilune.core.ResourceLocationBuilder;
+
 // 单个图像的图层，imageAreas的所有图层均按照其各自的depth进行带深度的绘制
 public class ImageDataSource {
 	// 背景优先度绘制模式
@@ -73,19 +75,19 @@ public class ImageDataSource {
 
 	// String
 	public ImageDataSource(String background_resourceloc, float u1, float v1, float u2, float v2, int drawPriority, DrawMode drawMode) {
-		this(net.minecraft.resources.ResourceLocation.parse(background_resourceloc), u1, v1, u2, v2, drawPriority, drawMode);
+		this(ResourceLocationBuilder.getResourceLocationFromNamespacedID(background_resourceloc), u1, v1, u2, v2, drawPriority, drawMode);
 	}
 
 	public ImageDataSource(String background_resourceloc, float u1, float v1, float u2, float v2) {
-		this(net.minecraft.resources.ResourceLocation.parse(background_resourceloc), u1, v1, u2, v2);
+		this(ResourceLocationBuilder.getResourceLocationFromNamespacedID(background_resourceloc), u1, v1, u2, v2);
 	}
 
 	public ImageDataSource(String background_resourceloc, int drawPriority, DrawMode drawMode) {
-		this(net.minecraft.resources.ResourceLocation.parse(background_resourceloc), drawPriority, drawMode);
+		this(ResourceLocationBuilder.getResourceLocationFromNamespacedID(background_resourceloc), drawPriority, drawMode);
 	}
 
 	public ImageDataSource(String background_resourceloc) {
-		this(net.minecraft.resources.ResourceLocation.parse(background_resourceloc));
+		this(ResourceLocationBuilder.getResourceLocationFromNamespacedID(background_resourceloc));
 	}
 
 	public ImageDataSource setDrawPriority(int drawPriority) {

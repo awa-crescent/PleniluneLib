@@ -1,5 +1,7 @@
 package lib.plenilune.client.render.model;
 
+import lib.plenilune.core.RegistryManager;
+import lib.plenilune.core.ResourceLocationBuilder;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 
@@ -29,7 +31,22 @@ public class ItemModelRenderingInfo {
 	}
 
 	public ItemModelRenderingInfo(ResourceLocation resourceLoc) {
-		this(resourceLoc, null);
+		this(resourceLoc, RegistryManager.item.get(resourceLoc));
+	}
+
+	public ItemModelRenderingInfo(String resourceLoc, String itemType, int combinedLight, int combinedOverlay) {
+		this.resourceLoc = ResourceLocationBuilder.getResourceLocationFromNamespacedID(resourceLoc);
+		this.itemType = RegistryManager.item.get(ResourceLocationBuilder.getResourceLocationFromNamespacedID(itemType));
+		this.combinedLight = combinedLight;
+		this.combinedOverlay = combinedOverlay;
+	}
+
+	public ItemModelRenderingInfo(String resourceLoc, String itemType) {
+		this(resourceLoc, itemType, NORMAL_LIGHT, NO_OVERLAY);
+	}
+
+	public ItemModelRenderingInfo(String resourceLoc) {
+		this(resourceLoc, resourceLoc);
 	}
 
 	@Override

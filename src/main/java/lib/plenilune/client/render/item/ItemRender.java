@@ -17,11 +17,18 @@ public class ItemRender {
 		before_render_Funcs.add(func);
 	}
 
-	// render()中model.getTransform()前
-	public static ArrayList<ItemRendererRenderFunc> before_render_model_getTransform_Funcs = new ArrayList<>();
+	// render()中pose.translate()前
+	public static ArrayList<ItemRendererRenderFunc> after_modify_model_before_translate_Funcs = new ArrayList<>();
 
-	public static void add_before_render_model_getTransform_Func(ItemRendererRenderFunc func) {
-		before_render_model_getTransform_Funcs.add(func);
+	public static void add_after_modify_model_before_translate_Func(ItemRendererRenderFunc func) {
+		after_modify_model_before_translate_Funcs.add(func);
+	}
+
+	// render()中pose.translate()后
+	public static ArrayList<ItemRendererRenderFunc> before_render_model_translate_Funcs = new ArrayList<>();
+
+	public static void add_before_render_model_translate_Func(ItemRendererRenderFunc func) {
+		before_render_model_translate_Funcs.add(func);
 	}
 
 	// render()返回前

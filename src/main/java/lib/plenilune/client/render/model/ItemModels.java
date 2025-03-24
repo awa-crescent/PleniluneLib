@@ -8,7 +8,6 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import com.mojang.blaze3d.vertex.PoseStack;
 
 import lib.lunar.jvm.Manipulator;
-import lib.plenilune.PleniluneLib;
 import lib.plenilune.client.render.item.ItemRender;
 import lib.plenilune.client.render.item.ItemRendererRenderFunc;
 import lib.plenilune.core.ResourceLocationBuilder;
@@ -31,17 +30,26 @@ public class ItemModels {
 		@Override
 		public void render(ItemRenderer itemRender, ItemStack itemStack, ItemDisplayContext displayContext, boolean leftHand, PoseStack poseStack, MultiBufferSource bufferSource, int combinedLight, int combinedOverlay, BakedModel model, CallbackInfo ci) {
 			String item_id = ItemUtils.getID(itemStack.getItem());
-			PleniluneLib.LOGGER.info(item_id + " light=" + combinedLight + " overlay=" + combinedOverlay);
 			HashMap<String, ItemModelRenderingInfo> map = itemModels.get(displayContext.getId());
 			if (map.containsKey(item_id)) {
 				ItemModelRenderingInfo info = map.get(item_id);
 				ItemRender.currentFinalModel = itemRender.getItemModelShaper().getModelManager().getModel(new ModelResourceLocation(info.resourceLoc, "inventory"));
 				// 如果指定渲染物品类型，则需要更改ItemStack的item成员变量，因为该参数和model同样关乎渲染
 				if (info.itemType != null) {
+					poseStack.popPose();// 先撤销poseStack的model.getTransforms().getTransform().apply()的变换
+					poseStack.pushPose();// 推入原本的变换
 					ItemRender.currentOriginalRenderItem = (Item) Manipulator.access(itemStack, "field_8038");// 储存当前的ItemStack.item
 					Manipulator.setObject(itemStack, "field_8038", info.itemType);// 修改目标item成员
 				}
 			}
+		};
+	};
+
+	public static ItemRendererRenderFunc modelTransformFunc = new ItemRendererRenderFunc() {
+		@Override
+		public void render(ItemRenderer itemRender, ItemStack itemStack, ItemDisplayContext displayContext, boolean leftHand, PoseStack poseStack, MultiBufferSource bufferSource, int combinedLight, int combinedOverlay, BakedModel model, CallbackInfo ci) {
+			if (ItemRender.currentOriginalRenderItem != null)
+				model.getTransforms().getTransform(displayContext).apply(leftHand, poseStack);
 		};
 	};
 
@@ -61,7 +69,8 @@ public class ItemModels {
 		int context_num = ItemDisplayContext.values().length;
 		for (int i = 0; i < context_num; ++i)
 			itemModels.add(new HashMap<>());
-		ItemRender.add_before_render_model_getTransform_Func(modelReplaceFunc);
+		ItemRender.add_before_render_model_translate_Func(modelReplaceFunc);
+		ItemRender.add_after_modify_model_before_translate_Func(modelTransformFunc);
 		ItemRender.add_before_render_return_Func(itemTypeRecoveryFunc);
 	}
 
@@ -87,12 +96,16 @@ public class ItemModels {
 		setInventoryModel(item_id, new ItemModelRenderingInfo(model_resloc));
 	}
 
-	public static void setInventoryModel(String item_id, String model_resloc) {
-		setInventoryModel(item_id, ResourceLocationBuilder.getResourceLocationFromNamespacedID(model_resloc));
-	}
-
 	public static void setInventoryModel(String item_id, String model_resloc, Item item) {
 		setInventoryModel(item_id, ResourceLocationBuilder.getResourceLocationFromNamespacedID(model_resloc), item);
+	}
+
+	public static void setInventoryModel(String item_id, String model_resloc, String item) {
+		setInventoryModel(item_id, new ItemModelRenderingInfo(model_resloc, item));
+	}
+
+	public static void setInventoryModel(String item_id, String model_resloc) {
+		setInventoryModel(item_id, model_resloc, model_resloc);
 	}
 
 	// 物品渲染模型设置
@@ -111,12 +124,16 @@ public class ItemModels {
 		setInHandModel(item_id, new ItemModelRenderingInfo(model_resloc));
 	}
 
-	public static void setInHandModel(String item_id, String model_resloc) {
-		setInHandModel(item_id, ResourceLocationBuilder.getResourceLocationFromNamespacedID(model_resloc));
-	}
-
 	public static void setInHandModel(String item_id, String model_resloc, Item item) {
 		setInHandModel(item_id, ResourceLocationBuilder.getResourceLocationFromNamespacedID(model_resloc), item);
+	}
+
+	public static void setInHandModel(String item_id, String model_resloc, String item) {
+		setInHandModel(item_id, new ItemModelRenderingInfo(model_resloc, item));
+	}
+
+	public static void setInHandModel(String item_id, String model_resloc) {
+		setInHandModel(item_id, model_resloc, model_resloc);
 	}
 
 	public static ItemModelRenderingInfo getItemModel(String item_id, ItemDisplayContext context) {

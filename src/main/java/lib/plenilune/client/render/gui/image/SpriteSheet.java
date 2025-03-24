@@ -1,5 +1,7 @@
 package lib.plenilune.client.render.gui.image;
 
+import lib.plenilune.core.ResourceLocationBuilder;
+
 public class SpriteSheet {
 	private final net.minecraft.resources.ResourceLocation resourceLoc;;
 	private final float sprite_width;
@@ -54,7 +56,7 @@ public class SpriteSheet {
 	}
 
 	public SpriteSheet(String resourceLoc, int row, int column, float stride_x, float stride_y, float start_offset_x, float start_offset_y, float end_offset_x, float end_offset_y) {
-		this(net.minecraft.resources.ResourceLocation.parse(resourceLoc), row, column, stride_x, stride_y, start_offset_x, start_offset_y, end_offset_x, end_offset_y);
+		this(ResourceLocationBuilder.getResourceLocationFromNamespacedID(resourceLoc), row, column, stride_x, stride_y, start_offset_x, start_offset_y, end_offset_x, end_offset_y);
 	}
 
 	public ImageArea clipImage(int idx_x, int idx_y) {

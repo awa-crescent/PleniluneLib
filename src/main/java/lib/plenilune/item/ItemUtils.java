@@ -5,8 +5,6 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
-import com.mojang.blaze3d.vertex.BufferUploader;
-
 import it.unimi.dsi.fastutil.objects.Object2IntMap;
 import lib.lunar.jvm.Manipulator;
 import lib.lunar.nativemc.Version;
@@ -18,6 +16,7 @@ import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.Enchantment;
+import net.minecraft.world.item.enchantment.EnchantmentHelper;
 
 public class ItemUtils {
 	private static final int version_case;
@@ -92,7 +91,7 @@ public class ItemUtils {
 		switch (version_case) {
 		case 0: {
 			// EnchantmentHelper.getEnchantments(ItemStack arg0)
-			Map<Enchantment, Integer> map = (Map<Enchantment, Integer>) Manipulator.invoke(BufferUploader.class, "method_8222", new Class<?>[] { ItemStack.class }, stack);
+			Map<Enchantment, Integer> map = (Map<Enchantment, Integer>) Manipulator.invoke(EnchantmentHelper.class, "method_8222", new Class<?>[] { ItemStack.class }, stack);
 			Set<Entry<Enchantment, Integer>> enchantments_set = map.entrySet();// 获取物品所有附魔
 			for (Entry<Enchantment, Integer> entry : enchantments_set) {
 				list.add(new EnchantmentLevel(entry.getKey(), entry.getValue()));

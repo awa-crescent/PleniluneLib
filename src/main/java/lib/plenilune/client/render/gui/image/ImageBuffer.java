@@ -6,7 +6,6 @@ import java.util.Collection;
 import com.mojang.blaze3d.vertex.PoseStack;
 
 import lib.plenilune.client.render.gui.GuiRender;
-import lib.plenilune.client.render.gui.image.ImageDataSource.DrawMode;
 
 public class ImageBuffer {
 	protected ArrayList<ImageDataSource> data = new ArrayList<>();
@@ -19,12 +18,12 @@ public class ImageBuffer {
 			ImageDataSource source = data.get(source_idx);
 			if (currentSourcePriority <= source.drawPriority) {
 				switch (source.drawMode) {
-				case DrawMode.REPLACE: {
+				case REPLACE: {
 					// 替换模式下只记录最终的ImageDataSource索引并绘制它
 					finalReplaceBackgroundIndex = source_idx;
 				}
 					break;
-				case DrawMode.OVERLAY: {
+				case OVERLAY: {
 					// 覆盖模式下就直接在原ImageDataSource上继续绘制
 					if (source.imageAreas != null)
 						for (int i = 0; i < source.imageAreas.length; ++i) {

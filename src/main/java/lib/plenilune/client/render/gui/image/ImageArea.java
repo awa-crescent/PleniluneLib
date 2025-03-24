@@ -1,5 +1,7 @@
 package lib.plenilune.client.render.gui.image;
 
+import lib.plenilune.core.ResourceLocationBuilder;
+
 public class ImageArea {
 	public net.minecraft.resources.ResourceLocation resourceLoc;
 	public float u1;
@@ -30,7 +32,7 @@ public class ImageArea {
 	}
 
 	public static ImageArea from(String resourceLoc) {
-		return new ImageArea(net.minecraft.resources.ResourceLocation.parse(resourceLoc));
+		return new ImageArea(ResourceLocationBuilder.getResourceLocationFromNamespacedID(resourceLoc));
 	}
 
 	public static ImageArea[] from(net.minecraft.resources.ResourceLocation[] resourceLocs) {
@@ -43,7 +45,7 @@ public class ImageArea {
 	public static ImageArea[] from(String[] resourceLocs) {
 		ImageArea[] areas = new ImageArea[resourceLocs.length];
 		for (int i = 0; i < resourceLocs.length; ++i)
-			areas[i] = new ImageArea(net.minecraft.resources.ResourceLocation.parse(resourceLocs[i]));
+			areas[i] = new ImageArea(ResourceLocationBuilder.getResourceLocationFromNamespacedID(resourceLocs[i]));
 		return areas;
 	}
 }

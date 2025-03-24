@@ -1,7 +1,6 @@
 package lib.plenilune.client.render.model;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.resources.model.ModelBakery;
 import net.minecraft.client.resources.model.ModelManager;
 
 public class ModelRegistry {
