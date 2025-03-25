@@ -35,6 +35,10 @@ public class ImageArea {
 		return new ImageArea(ResourceLocationBuilder.getResourceLocationFromNamespacedID(resourceLoc));
 	}
 
+	public static ImageArea from(String resourceLoc, float u1, float v1, float u2, float v2) {
+		return new ImageArea(ResourceLocationBuilder.getResourceLocationFromNamespacedID(resourceLoc), u1, v1, u2, v2);
+	}
+
 	public static ImageArea[] from(net.minecraft.resources.ResourceLocation[] resourceLocs) {
 		ImageArea[] areas = new ImageArea[resourceLocs.length];
 		for (int i = 0; i < resourceLocs.length; ++i)

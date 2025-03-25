@@ -40,7 +40,7 @@ public abstract class ItemRendererMixin implements ResourceManagerReloadListener
 	}
 
 	// 在before_render_model_translate_Funcs()、render()中pose.translate()前修改model变量
-	@ModifyVariable(method = "render", at = @At(value = "INVOKE", target = "Lcom/mojang/blaze3d/vertex/PoseStack;translate(FFF)V", shift = At.Shift.BY, by = -2), name = "$$7")
+	@ModifyVariable(method = "render", at = @At(value = "INVOKE", target = "Lcom/mojang/blaze3d/vertex/PoseStack;translate(FFF)V", shift = At.Shift.BY, by = -2), index = 8)
 	private BakedModel modify_model_before_translate(BakedModel model) {
 		if (ItemRender.currentFinalModel != null) {
 			BakedModel final_model = ItemRender.currentFinalModel;

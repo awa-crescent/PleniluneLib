@@ -6,6 +6,7 @@ import com.mojang.blaze3d.vertex.PoseStack;
 
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.EntityRenderer;
+import net.minecraft.world.entity.Entity;
 
 public interface EntityRendererRenderFunc {
 	/**
@@ -21,6 +22,6 @@ public interface EntityRendererRenderFunc {
 	 * @param guiOffset 渲染的深度
 	 */
 	@SuppressWarnings("rawtypes")
-	public default void render(EntityRenderer entityRender, float entityYaw, float partialTick, PoseStack poseStack, MultiBufferSource bufferSource, int packedLight, CallbackInfo ci) {
+	public default void render(EntityRenderer entityRender, Entity entity, float entityYaw, float partialTick, PoseStack poseStack, MultiBufferSource bufferSource, int packedLight, CallbackInfo ci) {
 	};
 }

@@ -10,7 +10,7 @@ import lib.plenilune.client.render.gui.GuiRender;
 public class ImageBuffer {
 	protected ArrayList<ImageDataSource> data = new ArrayList<>();
 
-	public void render(PoseStack poseStack, int x1, int x2, int y1, int y2) {
+	public void render(PoseStack poseStack, float x1, float x2, float y1, float y2) {
 		poseStack.pushPose();
 		int finalReplaceBackgroundIndex = -1;// 在REPLACE模式下最终要绘制的ImageDataSource的索引
 		int currentSourcePriority = -1;// 当前ImageDataSource的优先级
@@ -28,7 +28,8 @@ public class ImageBuffer {
 					if (source.imageAreas != null)
 						for (int i = 0; i < source.imageAreas.length; ++i) {
 							ImageArea area = source.imageAreas[i];
-							GuiRender.blitImage(poseStack, area.resourceLoc, x1, x2, y1, y2, area.depth, area.u1, area.u2, area.v1, area.v2);
+							// System.out.println("draw " + area + " at " + x1 + " " + x2 + " " + y1 + " " + y2);
+							GuiRender.blitImage(poseStack, area.resourceLoc, x1 + source.x1_offset, x2 + source.x2_offset, y1 + source.y1_offset, y2 + source.y2_offset, area.depth, area.u1, area.u2, area.v1, area.v2);
 						}
 				}
 					break;
@@ -40,7 +41,7 @@ public class ImageBuffer {
 			ImageDataSource source = data.get(finalReplaceBackgroundIndex);
 			for (int i = 0; i < source.imageAreas.length; ++i) {
 				ImageArea area = source.imageAreas[i];
-				GuiRender.blitImage(poseStack, area.resourceLoc, x1, x2, y1, y2, area.depth, area.u1, area.u2, area.v1, area.v2);
+				GuiRender.blitImage(poseStack, area.resourceLoc, x1 + source.x1_offset, x2 + source.x2_offset, y1 + source.y1_offset, y2 + source.y2_offset, area.depth, area.u1, area.u2, area.v1, area.v2);
 			}
 		}
 		poseStack.popPose();

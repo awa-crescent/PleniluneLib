@@ -38,18 +38,20 @@ public class ItemModels {
 				if (info.itemType != null) {
 					poseStack.popPose();// 先撤销poseStack的model.getTransforms().getTransform().apply()的变换
 					poseStack.pushPose();// 推入原本的变换
-					ItemRender.currentOriginalRenderItem = (Item) Manipulator.access(itemStack, "field_8038");// 储存当前的ItemStack.item
-					Manipulator.setObject(itemStack, "field_8038", info.itemType);// 修改目标item成员
+					ItemRender.currentOriginalRenderItem = (Item) Manipulator.access(itemStack, "item");// 储存当前的ItemStack.item
+					Manipulator.setObject(itemStack, "item", info.itemType);// 修改目标item成员
 				}
 			}
 		};
 	};
 
 	public static ItemRendererRenderFunc modelTransformFunc = new ItemRendererRenderFunc() {
+		@SuppressWarnings("deprecation")
 		@Override
 		public void render(ItemRenderer itemRender, ItemStack itemStack, ItemDisplayContext displayContext, boolean leftHand, PoseStack poseStack, MultiBufferSource bufferSource, int combinedLight, int combinedOverlay, BakedModel model, CallbackInfo ci) {
 			if (ItemRender.currentOriginalRenderItem != null)
 				model.getTransforms().getTransform(displayContext).apply(leftHand, poseStack);
+
 		};
 	};
 
@@ -58,7 +60,7 @@ public class ItemModels {
 		public void render(ItemRenderer itemRender, ItemStack itemStack, ItemDisplayContext displayContext, boolean leftHand, PoseStack poseStack, MultiBufferSource bufferSource, int combinedLight, int combinedOverlay, BakedModel model, CallbackInfo ci) {
 			// 如果修改了渲染的item，则需要在渲染结束后改回去
 			if (ItemRender.currentOriginalRenderItem != null) {
-				Manipulator.setObject(itemStack, "field_8038", ItemRender.currentOriginalRenderItem);// ItemStack.item
+				Manipulator.setObject(itemStack, "item", ItemRender.currentOriginalRenderItem);// ItemStack.item
 				ItemRender.currentOriginalRenderItem = null;
 			}
 		};

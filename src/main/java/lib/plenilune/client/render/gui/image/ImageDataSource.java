@@ -13,6 +13,12 @@ public class ImageDataSource {
 
 	public ImageArea[] imageAreas;// 该图像的图层，图层具有深度
 	public int drawPriority = 0;// 该图像的整体优先级
+
+	public float x1_offset = 0;// 相对于目标渲染区域的位移
+	public float x2_offset = 0;
+	public float y1_offset = 0;
+	public float y2_offset = 0;
+
 	public DrawMode drawMode;// 当有该图像的优先度高于或等于目标时，新的图像是覆盖还是替换原图像
 
 	public ImageDataSource() {
@@ -31,7 +37,7 @@ public class ImageDataSource {
 		this(imageAreas, drawPriority, DEFAULT_DRAWMODE);
 	}
 
-	public ImageDataSource(ImageArea[] imageAreas) {
+	public ImageDataSource(ImageArea... imageAreas) {
 		this(imageAreas, 0);
 	}
 
@@ -41,10 +47,6 @@ public class ImageDataSource {
 
 	public ImageDataSource(ImageArea imageAreas, int drawPriority) {
 		this(imageAreas, drawPriority, DEFAULT_DRAWMODE);
-	}
-
-	public ImageDataSource(ImageArea imageArea) {
-		this(imageArea, 0, DEFAULT_DRAWMODE);
 	}
 
 	public ImageDataSource(net.minecraft.resources.ResourceLocation[] background_resourceloc) {
@@ -92,6 +94,22 @@ public class ImageDataSource {
 
 	public ImageDataSource setDrawPriority(int drawPriority) {
 		this.drawPriority = drawPriority;
+		return this;
+	}
+
+	public ImageDataSource setRenderingOffset(float x1, float y1, float x2, float y2) {
+		this.x1_offset = x1;
+		this.x2_offset = x2;
+		this.y1_offset = y1;
+		this.y2_offset = y2;
+		return this;
+	}
+
+	public ImageDataSource setRenderingOffset(float x, float y) {
+		this.x1_offset = x;
+		this.x2_offset = x;
+		this.y1_offset = y;
+		this.y2_offset = y;
 		return this;
 	}
 

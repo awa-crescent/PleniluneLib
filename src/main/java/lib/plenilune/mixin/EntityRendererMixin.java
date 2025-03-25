@@ -16,9 +16,9 @@ import net.minecraft.world.entity.Entity;
 @Mixin(targets = { "net.minecraft.client.renderer.entity.EntityRenderer" })
 public abstract class EntityRendererMixin<T extends Entity> {
 	@SuppressWarnings("rawtypes")
-	@Inject(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/entity/EntityRenderer;shouldShowName(Lnet/minecraft/world/entity/Entity;)Z", shift = At.Shift.BEFORE), cancellable = true)
-	private void before_render_shouldShowName(float entityYaw, float partialTick, PoseStack poseStack, MultiBufferSource bufferSource, int packedLight, CallbackInfo ci) {
+	@Inject(method = "render", at = @At(value = "HEAD"), cancellable = true)
+	private void before_render_shouldShowName(Entity entity, float entityYaw, float partialTick, PoseStack poseStack, MultiBufferSource bufferSource, int packedLight, CallbackInfo ci) {
 		for (EntityRendererRenderFunc func : EntityRender.before_render_shouldShowName)
-			func.render((EntityRenderer) (Object) this, entityYaw, partialTick, poseStack, bufferSource, packedLight, ci);// (GuiGraphics) (Object) this用于trick编译器使其强制转换编译通过，this实际上正是GuiGraphics对象本体
+			func.render((EntityRenderer) (Object) this, entity, entityYaw, partialTick, poseStack, bufferSource, packedLight, ci);// (GuiGraphics) (Object) this用于trick编译器使其强制转换编译通过，this实际上正是GuiGraphics对象本体
 	}
 }
