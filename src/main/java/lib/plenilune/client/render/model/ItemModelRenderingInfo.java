@@ -34,9 +34,10 @@ public class ItemModelRenderingInfo {
 		this(resourceLoc, RegistryManager.item.get(resourceLoc));
 	}
 
+	// 如果显示给itemType指定为null，则取消目标模型的渲染
 	public ItemModelRenderingInfo(String resourceLoc, String itemType, int combinedLight, int combinedOverlay) {
 		this.resourceLoc = ResourceLocationBuilder.getResourceLocationFromNamespacedID(resourceLoc);
-		this.itemType = RegistryManager.item.get(ResourceLocationBuilder.getResourceLocationFromNamespacedID(itemType));
+		this.itemType = itemType == null ? null : RegistryManager.item.get(ResourceLocationBuilder.getResourceLocationFromNamespacedID(itemType));
 		this.combinedLight = combinedLight;
 		this.combinedOverlay = combinedOverlay;
 	}
@@ -51,6 +52,6 @@ public class ItemModelRenderingInfo {
 
 	@Override
 	public String toString() {
-		return "{resourceLoc=" + resourceLoc + ", itemType=" + itemType == null ? "null" : itemType.toString() + ", combinedLight=" + Integer.toHexString(combinedLight) + ", combinedOverlay=" + Integer.toHexString(combinedOverlay) + '}';
+		return "{resourceLoc=" + resourceLoc + ", itemType=" + itemType + ", combinedLight=" + Integer.toHexString(combinedLight) + ", combinedOverlay=" + Integer.toHexString(combinedOverlay) + '}';
 	}
 }

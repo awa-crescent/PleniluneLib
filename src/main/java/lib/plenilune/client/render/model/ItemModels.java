@@ -33,6 +33,11 @@ public class ItemModels {
 			HashMap<String, ItemModelRenderingInfo> map = itemModels.get(displayContext.getId());
 			if (map.containsKey(item_id)) {
 				ItemModelRenderingInfo info = map.get(item_id);
+				// 手动指定模型路径为null将导致取消该物品的渲染
+				if (info.resourceLoc == null) {
+					ci.cancel();
+					return;
+				}
 				ItemRender.currentFinalModel = itemRender.getItemModelShaper().getModelManager().getModel(new ModelResourceLocation(info.resourceLoc, "inventory"));
 				// 如果指定渲染物品类型，则需要更改ItemStack的item成员变量，因为该参数和model同样关乎渲染
 				if (info.itemType != null) {
@@ -46,7 +51,6 @@ public class ItemModels {
 	};
 
 	public static ItemRendererRenderFunc modelTransformFunc = new ItemRendererRenderFunc() {
-		@SuppressWarnings("deprecation")
 		@Override
 		public void render(ItemRenderer itemRender, ItemStack itemStack, ItemDisplayContext displayContext, boolean leftHand, PoseStack poseStack, MultiBufferSource bufferSource, int combinedLight, int combinedOverlay, BakedModel model, CallbackInfo ci) {
 			if (ItemRender.currentOriginalRenderItem != null)
@@ -76,18 +80,22 @@ public class ItemModels {
 		ItemRender.add_before_render_return_Func(itemTypeRecoveryFunc);
 	}
 
-	public static void setItemModel(String item_id, ItemModelRenderingInfo info, ItemDisplayContext context) {
+	public static void setItemModel(String item_id, ItemDisplayContext context, ItemModelRenderingInfo info) {
 		itemModels.get(context.getId()).put(item_id, info);
 	}
 
-	public static void setItemModel(String item_id, ItemModelRenderingInfo info, String context) {
-		setItemModel(item_id, info, ItemRender.parseItemDisplayContext(context));
+	public static void setItemModel(String item_id, String context, String model_resloc, String item) {
+		setItemModel(item_id, ItemRender.parseItemDisplayContext(context), new ItemModelRenderingInfo(model_resloc, item));
+	}
+
+	public static void setItemModel(String item_id, String context, String model_resloc) {
+		setItemModel(item_id, ItemRender.parseItemDisplayContext(context), new ItemModelRenderingInfo(model_resloc, model_resloc));
 	}
 
 	public static void setInventoryModel(String item_id, ItemModelRenderingInfo info) {
-		setItemModel(item_id, info, ItemDisplayContext.GUI);
-		setItemModel(item_id, info, ItemDisplayContext.GROUND);
-		setItemModel(item_id, info, ItemDisplayContext.FIXED);
+		setItemModel(item_id, ItemDisplayContext.GUI, info);
+		setItemModel(item_id, ItemDisplayContext.GROUND, info);
+		setItemModel(item_id, ItemDisplayContext.FIXED, info);
 	}
 
 	public static void setInventoryModel(String item_id, ResourceLocation model_resloc, Item item) {
@@ -112,10 +120,10 @@ public class ItemModels {
 
 	// 物品渲染模型设置
 	public static void setInHandModel(String item_id, ItemModelRenderingInfo info) {
-		setItemModel(item_id, info, ItemDisplayContext.THIRD_PERSON_LEFT_HAND);
-		setItemModel(item_id, info, ItemDisplayContext.THIRD_PERSON_RIGHT_HAND);
-		setItemModel(item_id, info, ItemDisplayContext.FIRST_PERSON_LEFT_HAND);
-		setItemModel(item_id, info, ItemDisplayContext.FIRST_PERSON_RIGHT_HAND);
+		setItemModel(item_id, ItemDisplayContext.THIRD_PERSON_LEFT_HAND, info);
+		setItemModel(item_id, ItemDisplayContext.THIRD_PERSON_RIGHT_HAND, info);
+		setItemModel(item_id, ItemDisplayContext.FIRST_PERSON_LEFT_HAND, info);
+		setItemModel(item_id, ItemDisplayContext.FIRST_PERSON_RIGHT_HAND, info);
 	}
 
 	public static void setInHandModel(String item_id, ResourceLocation model_resloc, Item item) {

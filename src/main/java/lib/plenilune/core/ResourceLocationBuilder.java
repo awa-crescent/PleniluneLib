@@ -90,6 +90,8 @@ public class ResourceLocationBuilder {
 	 * @return
 	 */
 	public static ResourceLocation getResourceLocationFromNamespacedID(String namespaced_id) {
+		if (namespaced_id == null)
+			return null;
 		String[] namespace_id = parseNamespacedID(namespaced_id);
 		return getResourceLocationFromNamespacedID(namespace_id[0], namespace_id[1]);
 	}
