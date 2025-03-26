@@ -5,6 +5,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.At.Shift;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.ModifyVariable;
+import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import com.mojang.blaze3d.vertex.PoseStack;
@@ -55,5 +56,11 @@ public abstract class ItemRendererMixin implements ResourceManagerReloadListener
 	private void after_modify_model_before_translate_Funcs(ItemStack itemStack, ItemDisplayContext displayContext, boolean leftHand, PoseStack poseStack, MultiBufferSource bufferSource, int combinedLight, int combinedOverlay, BakedModel model, CallbackInfo ci) {
 		for (ItemRendererRenderFunc func : ItemRender.after_modify_model_before_translate_Funcs)
 			func.render((ItemRenderer) (Object) this, itemStack, displayContext, leftHand, poseStack, bufferSource, combinedLight, combinedOverlay, model, ci);
+	}
+
+	// 在render()中重定向对ItemStack.hasFoil()的调用，可以决定是否渲染附魔特效
+	@Redirect(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/item/ItemStack;hasFoil()Z"))
+	private boolean itemStack_hasFoil(ItemStack itemStack) {
+		return ItemRender.hasFoilFunc.hasFoil(itemStack);
 	}
 }

@@ -2,6 +2,7 @@ package lib.plenilune.client.render.item;
 
 import java.util.ArrayList;
 
+import net.cloudwb.top.client.renderer.item.ItemStackFunc;
 import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemDisplayContext;
@@ -9,6 +10,7 @@ import net.minecraft.world.item.ItemDisplayContext;
 public class ItemRender {
 	public static BakedModel currentFinalModel = null;
 	public static Item currentOriginalRenderItem = null;
+	public static ItemStackFunc hasFoilFunc = ItemStackFunc.hasFoil_Default;
 
 	// render()渲染前
 	public static ArrayList<ItemRendererRenderFunc> before_render_Funcs = new ArrayList<>();
@@ -70,5 +72,12 @@ public class ItemRender {
 			break;
 		}
 		return context;
+	}
+
+	public static void renderItemGlint(boolean glint) {
+		if (glint)
+			hasFoilFunc = ItemStackFunc.hasFoil_Default;
+		else
+			hasFoilFunc = ItemStackFunc.hasFoil_Always_False;
 	}
 }

@@ -40,6 +40,7 @@ public class GuiRender {
 	public static void blitImage(PoseStack poseStack, net.minecraft.resources.ResourceLocation atlasLocation, float x1, float x2, float y1, float y2, float blitOffset, float minU, float maxU, float minV, float maxV) {
 		RenderSystem.setShaderTexture(0, (atlasLocation));
 		RenderSystem.setShader(GameRenderer::getPositionTexShader);
+		RenderSystem.enableBlend();
 		Matrix4f matrix4f = poseStack.last().pose();
 		BufferBuilder bufferBuilder = TesselatorInstance.getBufferBuilder(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_TEX);
 		TesselatorInstance.posUvVertex(bufferBuilder, matrix4f, x1, y1, blitOffset, minU, minV);
@@ -47,6 +48,7 @@ public class GuiRender {
 		TesselatorInstance.posUvVertex(bufferBuilder, matrix4f, x2, y2, blitOffset, maxU, maxV);
 		TesselatorInstance.posUvVertex(bufferBuilder, matrix4f, x2, y1, blitOffset, maxU, minV);
 		TesselatorInstance.drawBufferBuilder(bufferBuilder);
+		RenderSystem.disableBlend();
 	}
 
 	public static void blitImage(PoseStack poseStack, net.minecraft.resources.ResourceLocation atlasLocation, int x1, int x2, int y1, int y2, int blitOffset) {

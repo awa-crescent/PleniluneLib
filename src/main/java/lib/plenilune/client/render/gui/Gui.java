@@ -53,7 +53,7 @@ public class Gui {
 	}
 
 	public void render(PoseStack poseStack, float x, float y) {
-		render(poseStack, x, x + width, y, y + width);
+		render(poseStack, x, x + width, y, y + height);
 	}
 
 	// 实体GUI坐标系，向左向上为正；寻常GUI坐标系原点在左上角，向右向下为正
