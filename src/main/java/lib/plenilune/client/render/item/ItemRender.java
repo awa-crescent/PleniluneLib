@@ -2,7 +2,6 @@ package lib.plenilune.client.render.item;
 
 import java.util.ArrayList;
 
-import net.cloudwb.top.client.renderer.item.ItemStackFunc;
 import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemDisplayContext;
