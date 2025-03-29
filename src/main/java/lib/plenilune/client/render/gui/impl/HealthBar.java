@@ -23,7 +23,7 @@ public class HealthBar extends Bar {
 
 	// 子类可覆写的方法
 	public void onShow(LivingEntity entity, float health_percentage) {
-		setProgress(0, health_percentage);
+		setProgress(health_percentage);
 	}
 
 	@Override

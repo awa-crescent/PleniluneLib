@@ -13,4 +13,10 @@ public class EntityRender {
 	}
 
 	public static EntityRenderDispatcher entityRenderDispatcher = null;
+
+	public static ArrayList<EntityRenderDispatcherRenderFunc> before_EntityRenderDispatcher_render_popPose_Funcs = new ArrayList<>();
+
+	public static void add_before_EntityRenderDispatcher_render_popPose_Func(EntityRenderDispatcherRenderFunc func) {
+		before_EntityRenderDispatcher_render_popPose_Funcs.add(func);
+	}
 }

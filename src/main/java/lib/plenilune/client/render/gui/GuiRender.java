@@ -13,6 +13,8 @@ import com.mojang.blaze3d.vertex.VertexFormat;
 import lib.plenilune.client.render.TesselatorInstance;
 import lib.plenilune.core.ResourceLocationBuilder;
 import net.minecraft.client.renderer.GameRenderer;
+import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.RenderType;
 
 public class GuiRender {
 
@@ -49,6 +51,17 @@ public class GuiRender {
 		TesselatorInstance.posUvVertex(bufferBuilder, matrix4f, x2, y1, blitOffset, maxU, minV);
 		TesselatorInstance.drawBufferBuilder(bufferBuilder);
 		RenderSystem.disableBlend();
+	}
+
+	public static void blitImage(MultiBufferSource bufferSource, RenderType type, PoseStack poseStack, net.minecraft.resources.ResourceLocation atlasLocation, float x1, float x2, float y1, float y2, float blitOffset, float minU, float maxU, float minV, float maxV) {
+		RenderSystem.setShaderTexture(0, (atlasLocation));
+		RenderSystem.setShader(GameRenderer::getPositionTexShader);
+		Matrix4f matrix4f = poseStack.last().pose();
+		BufferBuilder bufferBuilder = (BufferBuilder) bufferSource.getBuffer(type);
+		TesselatorInstance.posUvColorVertex(bufferBuilder, matrix4f, x1, y1, blitOffset, minU, minV);
+		TesselatorInstance.posUvColorVertex(bufferBuilder, matrix4f, x1, y2, blitOffset, minU, maxV);
+		TesselatorInstance.posUvColorVertex(bufferBuilder, matrix4f, x2, y2, blitOffset, maxU, maxV);
+		TesselatorInstance.posUvColorVertex(bufferBuilder, matrix4f, x2, y1, blitOffset, maxU, minV);
 	}
 
 	public static void blitImage(PoseStack poseStack, net.minecraft.resources.ResourceLocation atlasLocation, int x1, int x2, int y1, int y2, int blitOffset) {

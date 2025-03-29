@@ -74,6 +74,15 @@ public class Bar extends Gui {
 		return this;
 	}
 
+	public int resolveStyle(float progress_percentage) {
+		return 0;
+	}
+
+	public final Bar setProgress(float progress_percentage) {
+		setProgress(resolveStyle(progress_percentage), progress_percentage);
+		return this;
+	}
+
 	public final Bar setProgress(int style_idx, float progress_percentage) {
 		guiComponents.clear();
 		Style style = styles.get(style_idx);

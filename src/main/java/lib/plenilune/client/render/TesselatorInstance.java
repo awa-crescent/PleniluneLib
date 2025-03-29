@@ -93,6 +93,41 @@ public class TesselatorInstance {
 		}
 	}
 
+	public static BufferBuilder setColor(BufferBuilder bufferBuilder, float r, float g, float b, float a) {
+		// 1.20.1 VertexConsumer.color(float arg0, float arg1, float arg2, float arg3)
+		// 1.21.1 VertexConsumer.setColor(float arg0, float arg1, float arg2, float arg3)
+		switch (version_case) {
+		case 0: {
+			Manipulator.invoke(bufferBuilder, "color", new Class<?>[] { float.class, float.class, float.class, float.class }, r, g, b, a);
+		}
+			break;
+		case 1: {
+			Manipulator.invoke(bufferBuilder, "setColor", new Class<?>[] { float.class, float.class, float.class, float.class }, r, g, b, a);
+		}
+			break;
+		}
+		return bufferBuilder;
+	}
+
+	public static void posUvColorVertex(BufferBuilder bufferBuilder, Matrix4f pose, float x, float y, float z, float u, float v, float r, float g, float b, float a) {
+		switch (version_case) {
+		case 0: {
+			setColor(setUv(addVertex(bufferBuilder, pose, x, y, z), u, v), r, g, b, a);
+			// 1.20.1 VertexConsumer.endVertex()
+			Manipulator.invoke(bufferBuilder, "endVertex", null);
+		}
+			break;
+		case 1: {
+			setColor(setUv(addVertex(bufferBuilder, pose, x, y, z), u, v), r, g, b, a);
+		}
+			break;
+		}
+	}
+
+	public static void posUvColorVertex(BufferBuilder bufferBuilder, Matrix4f pose, float x, float y, float z, float u, float v) {
+		posUvColorVertex(bufferBuilder, pose, x, y, z, u, v, 1.0f, 1.0f, 1.0f, 1.0f);
+	}
+
 	public static void drawBufferBuilder(BufferBuilder bufferBuilder) {
 		switch (version_case) {
 		case 0: {

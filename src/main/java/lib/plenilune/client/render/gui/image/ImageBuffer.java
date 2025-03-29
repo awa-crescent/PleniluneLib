@@ -6,6 +6,8 @@ import java.util.Collection;
 import com.mojang.blaze3d.vertex.PoseStack;
 
 import lib.plenilune.client.render.gui.GuiRender;
+import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.RenderType;
 
 public class ImageBuffer {
 	protected ArrayList<ImageDataSource> data = new ArrayList<>();
@@ -42,6 +44,43 @@ public class ImageBuffer {
 			for (int i = 0; i < source.imageAreas.length; ++i) {
 				ImageArea area = source.imageAreas[i];
 				GuiRender.blitImage(poseStack, area.resourceLoc, x1 + source.x1_offset, x2 + source.x2_offset, y1 + source.y1_offset, y2 + source.y2_offset, area.depth, area.u1, area.u2, area.v1, area.v2);
+			}
+		}
+		poseStack.popPose();
+	}
+
+	public void render(MultiBufferSource bufferSource, RenderType type, PoseStack poseStack, float x1, float x2, float y1, float y2) {
+		poseStack.pushPose();
+		int finalReplaceBackgroundIndex = -1;// 在REPLACE模式下最终要绘制的ImageDataSource的索引
+		int currentSourcePriority = -1;// 当前ImageDataSource的优先级
+		for (int source_idx = 0; source_idx < data.size(); ++source_idx) {
+			ImageDataSource source = data.get(source_idx);
+			if (currentSourcePriority <= source.drawPriority) {
+				switch (source.drawMode) {
+				case REPLACE: {
+					// 替换模式下只记录最终的ImageDataSource索引并绘制它
+					finalReplaceBackgroundIndex = source_idx;
+				}
+					break;
+				case OVERLAY: {
+					// 覆盖模式下就直接在原ImageDataSource上继续绘制
+					if (source.imageAreas != null)
+						for (int i = 0; i < source.imageAreas.length; ++i) {
+							ImageArea area = source.imageAreas[i];
+							// System.out.println("draw " + area + " at " + x1 + " " + x2 + " " + y1 + " " + y2);
+							GuiRender.blitImage(bufferSource, type, poseStack, area.resourceLoc, x1 + source.x1_offset, x2 + source.x2_offset, y1 + source.y1_offset, y2 + source.y2_offset, area.depth, area.u1, area.u2, area.v1, area.v2);
+						}
+				}
+					break;
+				}
+			}
+		}
+		// 如果有ImageDataSource是替换模式，则只绘制优先级最高的的ImageDataSource
+		if (!(finalReplaceBackgroundIndex < 0)) {
+			ImageDataSource source = data.get(finalReplaceBackgroundIndex);
+			for (int i = 0; i < source.imageAreas.length; ++i) {
+				ImageArea area = source.imageAreas[i];
+				GuiRender.blitImage(bufferSource, type, poseStack, area.resourceLoc, x1 + source.x1_offset, x2 + source.x2_offset, y1 + source.y1_offset, y2 + source.y2_offset, area.depth, area.u1, area.u2, area.v1, area.v2);
 			}
 		}
 		poseStack.popPose();

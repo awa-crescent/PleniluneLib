@@ -6,6 +6,8 @@ import com.mojang.blaze3d.vertex.PoseStack;
 
 import lib.plenilune.client.render.gui.image.ImageBuffer;
 import lib.plenilune.client.render.gui.image.ImageDataSource;
+import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.EntityRenderDispatcher;
 import net.minecraft.world.entity.Entity;
 
@@ -47,6 +49,16 @@ public class Gui {
 		buffer.clear();
 	}
 
+	public void render(MultiBufferSource bufferSource, RenderType type, PoseStack poseStack, float x1, float x2, float y1, float y2) {
+		for (ImageDataSource component : guiComponents) {
+			if (component == null)
+				continue;
+			buffer.add(component);
+		}
+		buffer.render(bufferSource, type, poseStack, x1, x2, y1, y2);
+		buffer.clear();
+	}
+
 	// 渲染一帧结束后的操作
 	public void dispose() {
 
@@ -81,7 +93,7 @@ public class Gui {
 	}
 
 	public float entityGuiDrawHeight(Entity entity) {
-		return entity.getBbHeight() + 0.5f + height;
+		return entity.getBbHeight() + height;
 	}
 
 	public float entityGuiDrawOffsetX(Entity entity) {
